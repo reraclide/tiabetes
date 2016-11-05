@@ -23,7 +23,7 @@ public class UsuarioSVC implements UsuarioRN {
 				return Retorno.getFuncional("Senha inválida!");
 			}
 			
-			return Retorno.getSucesso("teste");
+			return Retorno.getSucesso();
 			
 		} catch (Exception ex) {
 			return Retorno.getArquitetura("Erro ao validar acesso: " + ex.getMessage());
