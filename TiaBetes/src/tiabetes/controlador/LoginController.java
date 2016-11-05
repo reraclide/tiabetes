@@ -19,7 +19,7 @@ import tiabetes.modelo.negocio.UsuarioRN;
 import tiabetes.modelo.servico.UsuarioSVC;
 
 /**
- * EMERSON ESTEVE AQUI RS
+ * EMERSON ESTEVE AQUI
  * Servlet implementation class UsuarioController
  */
 @WebServlet("/LoginController")
