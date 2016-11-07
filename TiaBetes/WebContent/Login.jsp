@@ -23,7 +23,7 @@
 	
 	%>
 	<div align="center">
-		<h1>TiaBete's - Login</h1>
+		<h1>TiaBete's - Autenticação</h1>
 		<h3><%=mensagem%></h3>
 		
 		<form action="./LoginController" method="POST">
