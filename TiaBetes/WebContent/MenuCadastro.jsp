@@ -24,15 +24,17 @@
 	%>
 	<div align="center">
 		<h1>TiaBete's Doceria</h1>
-		<h2>Menu Principal</h2>
+		<h2>Menu Cadastros</h2>
 		<h3><%=mensagem%></h3>
 		<br />
-		<form action="./MenuController" method="POST">
+		<form action="./MenuCadastroController" method="POST">
 			<table>
 			
-				<tr><td><input type="submit" value="Cadastros" name="cmd" /></td></tr>
+				<tr><td><input type="submit" value="Usuários" name="cmd" /></td></tr>
 				<tr><td><br /></td></tr>
-				<tr><td><input type="submit" value="Logout" name="cmd" /></td></tr>
+				<tr><td><input type="submit" value="Produtos" name="cmd" /></td></tr>
+				<tr><td><br /></td></tr>
+				<tr><td><input type="submit" value="Voltar" name="cmd" /></td></tr>
 
 			</table>
 		</form>

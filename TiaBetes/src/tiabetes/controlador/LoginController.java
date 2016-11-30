@@ -19,7 +19,6 @@ import tiabetes.modelo.negocio.UsuarioRN;
 import tiabetes.modelo.servico.UsuarioSVC;
 
 /**
- * EMERSON ESTEVE AQUI hehe
  * Servlet implementation class UsuarioController
  */
 @WebServlet("/LoginController")
@@ -55,7 +54,7 @@ public class LoginController extends HttpServlet {
 
 				entrar(request, response);
 
-			} else if ("Criar Base de Dados".equals(cmd)){
+			} else if ("Criar Estrutura Base de Dados".equals(cmd)){
 				
 				criarBaseDados(request, response);
 				session.setAttribute("MENSAGEM", "Base criada com sucesso!");

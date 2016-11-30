@@ -24,15 +24,31 @@
 	%>
 	<div align="center">
 		<h1>TiaBete's Doceria</h1>
-		<h2>Menu Principal</h2>
+		<h2>Cadastro de Usuários</h2>
 		<h3><%=mensagem%></h3>
 		<br />
-		<form action="./MenuController" method="POST">
+		<form action="./CadastroUsuarioController" method="POST">
 			<table>
-			
-				<tr><td><input type="submit" value="Cadastros" name="cmd" /></td></tr>
-				<tr><td><br /></td></tr>
-				<tr><td><input type="submit" value="Logout" name="cmd" /></td></tr>
+				<tr>
+					<td><label for="txtNome">Nome: </label></td>
+					<td><input id="txtNome" type="text" name="txtNome" /></td>
+				</tr>
+				<tr>
+					<td><label for="txtLogin">Login: </label></td>
+					<td><input id="txtLogin" type="text" name="txtLogin" /></td>
+				</tr>
+				<tr>
+					<td><label for="txtSenha">Senha: </label></td>
+					<td><input id="txtSenha" type="text" name="txtSenha" /></td>
+				</tr>
+				<tr>
+					<td><label for="txtPerfil">Perfil: </label></td>
+					<td><input id="txtPerfil" type="text" name="txtPerfil" /></td>
+				</tr>
+				<tr>
+					<td><input type="submit" value="Salvar" name="cmd" /></td>
+				</tr>
+				<tr><td><input type="submit" value="Voltar" name="cmd" /></td></tr>
 
 			</table>
 		</form>
