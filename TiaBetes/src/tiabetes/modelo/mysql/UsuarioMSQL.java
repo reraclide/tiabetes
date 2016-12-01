@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import tiabetes.modelo.comum.entidade.Usuario;
 import tiabetes.modelo.comum.enumerador.TipoPerfil;
@@ -94,6 +96,96 @@ public class UsuarioMSQL implements UsuarioDAO{
 
 		}	
 
+	}
+
+	@Override
+	public List<Usuario> buscarListaUsuario() {
+			
+		List<Usuario> lstUsuario =  new ArrayList<Usuario>();
+		
+		String query = " SELECT `usuario`.`id_usuario`,    "
+				     + "        `usuario`.`ds_login`,      "
+				     + "        `usuario`.`ds_senha`,      "
+				     + "        `usuario`.`ds_nome`,       "
+				     + "        `usuario`.`cd_perfil`      "
+				     + "    FROM `tiabetes`.`usuario`      "
+
+				;
+		
+		try { 
+			
+			PreparedStatement psmt = conn.prepareStatement(query);
+			
+			ResultSet rs = psmt.executeQuery();
+			
+			if (rs.next()) {
+				Usuario usuario = new Usuario();
+				usuario.setId(rs.getLong("id_usuario"));
+				usuario.setLogin(rs.getString("ds_login"));
+				usuario.setSenha(rs.getString("ds_senha"));
+				usuario.setNome(rs.getString("ds_nome"));
+				usuario.setPerfil(TipoPerfil.values()[rs.getInt("cd_perfil")]);
+				lstUsuario.add(usuario);
+				
+			} else {
+				return null;
+			}
+			
+		} catch (SQLException ex) {
+			
+			throw new RuntimeException("Erro ao executar query: \r\n" 
+					+ query + "\r\n\r\n"
+					+ "Detalhes" + ex.getMessage());
+			
+		}
+		
+		return lstUsuario;
+	}
+
+	@Override
+	public Usuario buscarPorId(long id) {
+		
+		Usuario usuario = new Usuario();
+		
+		String query = " SELECT `usuario`.`id_usuario`, "
+				     + "        `usuario`.`ds_login`,      "
+				     + "        `usuario`.`ds_senha`,      "
+				     + "        `usuario`.`ds_nome`,       "
+				     + "        `usuario`.`cd_perfil`      "
+				     + "    FROM `tiabetes`.`usuario`      "
+				     + "    WHERE id_usuario = ?;          "
+
+				;
+		
+		try { 
+			
+			PreparedStatement psmt = conn.prepareStatement(query);
+			
+			psmt.setLong(1, id);
+			
+			ResultSet rs = psmt.executeQuery();
+			
+			if (rs.next()) {
+				
+				usuario.setId(rs.getLong("id_usuario"));
+				usuario.setLogin(rs.getString("ds_login"));
+				usuario.setSenha(rs.getString("ds_senha"));
+				usuario.setNome(rs.getString("ds_nome"));
+				usuario.setPerfil(TipoPerfil.values()[rs.getInt("cd_perfil")]);
+				
+			} else {
+				return null;
+			}
+			
+		} catch (SQLException ex) {
+			
+			throw new RuntimeException("Erro ao executar query: \r\n" 
+					+ query + "\r\n\r\n"
+					+ "Detalhes" + ex.getMessage());
+			
+		}
+		
+		return usuario;
 	}
 
 }
