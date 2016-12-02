@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import tiabetes.modelo.dao.BaseDAO;
+import tiabetes.modelo.dao.ProdutoDAO;
 import tiabetes.modelo.dao.UsuarioDAO;
 
 public class BaseMSQL implements BaseDAO {
@@ -25,7 +26,7 @@ public class BaseMSQL implements BaseDAO {
 					 + " ds_nome  VARCHAR(200) NOT NULL,            "
 					 + " cd_perfil TINYINT NOT NULL,                "
 					 + " PRIMARY KEY (id_usuario) );                "
-					 
+					
 					 ;
 		
 		try {
@@ -41,14 +42,37 @@ public class BaseMSQL implements BaseDAO {
 			
 		}
 		
+
+		query = " CREATE TABLE IF NOT EXISTS PRODUTO (       "
+		      + " id_produto INT(6) NOT NULL AUTO_INCREMENT, "
+		      + " ds_nome  VARCHAR(200) NOT NULL,            "
+		      + " PRIMARY KEY (id_produto) );                "
+			  
+		      ;
+
+		try {
+
+			PreparedStatement psmt = conn.prepareStatement(query);
+			psmt.executeUpdate();
+
+		} catch (SQLException ex){
+
+			throw new RuntimeException("Erro ao executar query: \r\n" 
+					+ query + "\r\n\r\n"
+					+ "Detalhes" + ex.getMessage());
+
+		}
+		
 	}
 
 	@Override
 	public void popularBaseDados() {
 		
 		UsuarioDAO usuarioDAO = new UsuarioMSQL();
+		ProdutoDAO produtoDAO = new ProdutoMSQL();
 		
 		usuarioDAO.popularBaseDados();
+		produtoDAO.popularBaseDados();
 
 	}
 

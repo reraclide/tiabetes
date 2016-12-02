@@ -9,25 +9,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import tiabetes.modelo.comum.entidade.Usuario;
-import tiabetes.modelo.comum.enumerador.TipoPerfil;
+import tiabetes.modelo.comum.entidade.Produto;
 import tiabetes.modelo.comum.util.Retorno;
-import tiabetes.modelo.dao.UsuarioDAO;
-import tiabetes.modelo.mysql.UsuarioMSQL;
+import tiabetes.modelo.dao.ProdutoDAO;
+import tiabetes.modelo.mysql.ProdutoMSQL;
 
 /**
- * Servlet implementation class CadastroUsuarioController
+ * Servlet implementation class CadastroProdutoController
  */
-@WebServlet("/CadastroUsuarioController")
-public class CadastroUsuarioController extends HttpServlet {
+@WebServlet("/CadastroProdutoController")
+public class CadastroProdutoController extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-	private static final String PostBack = "./CadastroUsuario.jsp";
+	private static final String PostBack = "./CadastroProduto.jsp";
 	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public CadastroUsuarioController() {
+	public CadastroProdutoController() {
 		super();
 	}
 
@@ -54,7 +53,7 @@ public class CadastroUsuarioController extends HttpServlet {
 				String modo = request.getParameter("txtModo");
 				Retorno retorno;
 				
-				if (modo == null || "Novo Usuário".equals(modo)) {
+				if (modo == null || "Novo Produto".equals(modo)) {
 					
 					retorno = inserir(request);
 					
@@ -65,22 +64,22 @@ public class CadastroUsuarioController extends HttpServlet {
 				}
 				
 				if (retorno.sucesso()){
-					session.setAttribute("MODO_CADASTRO_USUARIO", null);
-					session.setAttribute("USUARIO_EDITAR", null);
+					session.setAttribute("MODO_CADASTRO_PRODUTO", null);
+					session.setAttribute("PRODUTO_EDITAR", null);
 				}
 				
 				session.setAttribute("MENSAGEM", retorno.getMensagem());
 				
-				UsuarioDAO usrDAO = new UsuarioMSQL();
-				session.setAttribute("USUARIO_LISTA", usrDAO.buscarListaUsuario());
+				ProdutoDAO prdDAO = new ProdutoMSQL();
+				session.setAttribute("PRODUTO_LISTA", prdDAO.buscarListaProduto());
 				
 				response.sendRedirect(PostBack);
 				
 				
 			} else if ("Novo".equals(cmd)){
 				
-				session.setAttribute("MODO_CADASTRO_USUARIO", null);
-				session.setAttribute("USUARIO_EDITAR", null);
+				session.setAttribute("MODO_CADASTRO_PRODUTO", null);
+				session.setAttribute("PRODUTO_EDITAR", null);
 				response.sendRedirect(PostBack);
 				
 			} else if ("Voltar".equals(cmd)){
@@ -90,10 +89,10 @@ public class CadastroUsuarioController extends HttpServlet {
 			} else if ("Editar".equals(cmd.substring(0, 6))){
 				
 				long id = Long.parseLong(cmd.substring(6, cmd.length()));
-				UsuarioDAO usrDAO = new UsuarioMSQL();
-				Usuario usuarioEdit = usrDAO.buscarPorId(id);
-				session.setAttribute("USUARIO_EDITAR", usuarioEdit);
-				session.setAttribute("MODO_CADASTRO_USUARIO", "Editando usuário: " + usuarioEdit.getNome());
+				ProdutoDAO prdDAO = new ProdutoMSQL();
+				Produto produtoEdit = prdDAO.buscarPorId(id);
+				session.setAttribute("PRODUTO_EDITAR", produtoEdit);
+				session.setAttribute("MODO_CADASTRO_PRODUTO", "Editando usuário: " + produtoEdit.getNome());
 				response.sendRedirect(PostBack);
 				
 			} else if ("Excluir".equals(cmd.substring(0, 7))){
@@ -120,19 +119,13 @@ public class CadastroUsuarioController extends HttpServlet {
 		try{
 			
 			String txtNome = request.getParameter("txtNome");
-			String txtLogin = request.getParameter("txtLogin");
-			String txtSenha = request.getParameter("txtSenha");
-			String txtPerfil = request.getParameter("txtPerfil");
 			
-			Usuario usrNovo = new Usuario();
+			Produto prdNovo = new Produto();
 			
-			usrNovo.setNome(txtNome);
-			usrNovo.setLogin(txtLogin);
-			usrNovo.setSenha(txtSenha);
-			usrNovo.setPerfil(TipoPerfil.getPerfil(Integer.parseInt(txtPerfil)));
+			prdNovo.setNome(txtNome);
 			
-			UsuarioDAO usrDAO = new UsuarioMSQL();
-			usrDAO.inserir(usrNovo);
+			ProdutoDAO prdDAO = new ProdutoMSQL();
+			prdDAO.inserir(prdNovo);
 			
 			return Retorno.getSucesso("Cadastrado com sucesso!");
 			
@@ -146,20 +139,14 @@ public class CadastroUsuarioController extends HttpServlet {
 			
 			String txtId = request.getParameter("txtId");
 			String txtNome = request.getParameter("txtNome");
-			String txtLogin = request.getParameter("txtLogin");
-			String txtSenha = request.getParameter("txtSenha");
-			String txtPerfil = request.getParameter("txtPerfil");
 			
-			Usuario usrEdit = new Usuario();
+			Produto prdEdit = new Produto();
 			
-			usrEdit.setId(Long.parseLong(txtId));
-			usrEdit.setNome(txtNome);
-			usrEdit.setLogin(txtLogin);
-			usrEdit.setSenha(txtSenha);
-			usrEdit.setPerfil(TipoPerfil.getPerfil(Integer.parseInt(txtPerfil)));
+			prdEdit.setId(Long.parseLong(txtId));
+			prdEdit.setNome(txtNome);
 			
-			UsuarioDAO usrDAO = new UsuarioMSQL();
-			usrDAO.atualizar(usrEdit);
+			ProdutoDAO prdDAO = new ProdutoMSQL();
+			prdDAO.atualizar(prdEdit);
 			
 			return Retorno.getSucesso("Atualizado com sucesso!");
 			
@@ -171,8 +158,8 @@ public class CadastroUsuarioController extends HttpServlet {
 	private Retorno excluir(HttpServletRequest request, long id){
 		try{
 			
-			UsuarioDAO usrDAO = new UsuarioMSQL();
-			usrDAO.excluir(id);
+			ProdutoDAO prdDAO = new ProdutoMSQL();
+			prdDAO.excluir(id);
 			
 			return Retorno.getSucesso("Excluído com sucesso!");
 			

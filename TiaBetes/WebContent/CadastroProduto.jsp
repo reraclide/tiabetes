@@ -1,3 +1,6 @@
+<%@page import="tiabetes.modelo.mysql.ProdutoMSQL"%>
+<%@page import="tiabetes.modelo.dao.ProdutoDAO"%>
+<%@page import="tiabetes.modelo.comum.entidade.Produto"%>
 <%@page import="tiabetes.modelo.mysql.UsuarioMSQL"%>
 <%@page import="tiabetes.modelo.dao.UsuarioDAO"%>
 <%@page import="java.util.List"%>
@@ -13,19 +16,19 @@
 </head>
 <body>
 	<%
-		String modo = (String) session.getAttribute("MODO_CADASTRO_USUARIO");
+		String modo = (String) session.getAttribute("MODO_CADASTRO_PRODUTO");
 		String mensagem = (String) session.getAttribute("MENSAGEM");
 		Usuario usuario = (Usuario) session.getAttribute("USUARIO");
 		
 		@SuppressWarnings("unchecked")
-		List<Usuario> usuarios = (List<Usuario>) session.getAttribute("USUARIO_LISTA"); 
+		List<Produto> produtos = (List<Produto>) session.getAttribute("PRODUTO_LISTA"); 
 		
-		Usuario usrEdit = (Usuario) session.getAttribute("USUARIO_EDITAR");
+		Produto prdEdit = (Produto) session.getAttribute("PRODUTO_EDITAR");
 		
 		session.setAttribute("MENSAGEM", null);
-		session.setAttribute("LISTAUSUARIO", null);
-		session.setAttribute("USUARIO_EDITAR", null);
-		session.setAttribute("USUARIO_LISTA", null);
+		session.setAttribute("LISTAPRODUTO", null);
+		session.setAttribute("PRODUTO_EDITAR", null);
+		session.setAttribute("PRODUTO_LISTA", null);
 		
 		if (usuario == null) response.sendRedirect("./Login.jsp");
 		
@@ -34,41 +37,31 @@
 		}
 		
 		if (modo == null) {
-			modo = "Novo Usuário";
+			modo = "Novo Produto";
 		}
 		
-		if (usuarios == null || usuarios.size() <= 0){
-			UsuarioDAO usrDAO = new UsuarioMSQL();
-			usuarios = usrDAO.buscarListaUsuario();
+		if (produtos == null || produtos.size() <= 0){
+			ProdutoDAO prdDAO = new ProdutoMSQL();
+			produtos = prdDAO.buscarListaProduto();
 		}
 		
 		String idEdit = "";
 		String nomeEdit = "";
-		String loginEdit = "";
-		String senhaEdit = "";
-		String perfilEdit0 = "";
-		String perfilEdit1 = "";
-		String perfilEdit2 = "";
 		
-		if (usrEdit != null){
-			idEdit = String.valueOf(usrEdit.getId());
-			nomeEdit = usrEdit.getNome();
-			loginEdit = usrEdit.getLogin();
-			senhaEdit = usrEdit.getSenha();
-			perfilEdit0 = (usrEdit.getPerfil() == TipoPerfil.ADMINSTRADOR ? "selected" : "");
-			perfilEdit1 = (usrEdit.getPerfil() == TipoPerfil.FUNCIONARIO ? "selected" : "");
-			perfilEdit2 = (usrEdit.getPerfil() == TipoPerfil.CLIENTE ? "selected" : "");
+		if (prdEdit != null){
+			idEdit = String.valueOf(prdEdit.getId());
+			nomeEdit = prdEdit.getNome();
 		}
 		
 	%>
 	<div align="center">
 		<h1>TiaBete's Doceria</h1>
-		<h2>Cadastro de Usuários</h2>
+		<h2>Cadastro de Produtos</h2>
 		<h3><%=modo%></h3>
 		<h4><%=mensagem%></h4>
 		
 		<br />
-		<form action="./CadastroUsuarioController" method="POST">
+		<form action="./CadastroProdutoController" method="POST">
 			<table>
 				<tr style="display:none;">
 					<td><label for="txtModo">Modo: </label></td>
@@ -79,26 +72,8 @@
 					<td><input id="txtId" type="text" name="txtId" value='<%=idEdit%>' /></td>
 				</tr>
 				<tr>
-					<td><label for="txtNome">Nome: </label></td>
+					<td><label for="txtNome">Descrição: </label></td>
 					<td><input id="txtNome" type="text" name="txtNome" value='<%=nomeEdit%>' /></td>
-				</tr>
-				<tr>
-					<td><label for="txtLogin">Login: </label></td>
-					<td><input id="txtLogin" type="text" name="txtLogin" value='<%=loginEdit%>' /></td>
-				</tr>
-				<tr>
-					<td><label for="txtSenha">Senha: </label></td>
-					<td><input id="txtSenha" type="text" name="txtSenha" value='<%=senhaEdit%>' /></td>
-				</tr>
-				<tr>
-					<td><label for="txtPerfil">Perfil: </label></td>
-					<td>
-						<select id="txtPerfil" name="txtPerfil" >
-							<option <%=perfilEdit0%> value="0">Administrador</option>
-							<option <%=perfilEdit1%> value="1">Funcionário</option>
-							<option <%=perfilEdit2%> value="2">Cliente</option>
-						</select>
-					</td>
 				</tr>
 				<tr>
 					<td><input type="submit" value="Novo" name="cmd" /></td>
@@ -109,27 +84,23 @@
 			</table>
 
 			<%
-				if (usuarios != null && usuarios.size() > 0) {
+				if (produtos != null && produtos.size() > 0) {
 			%>
 			<div>
 				<br />
-				<h3>Usuários Cadastrados</h3>
+				<h3>Produtos Cadastrados</h3>
 			</div>
 			<table border="2">
 				<tr>
 					<td>Id</td>
 					<td>Nome</td>
-					<td>Login</td>
-					<td>Perfil</td>
 					<td></td>
 					<td></td>
 				</tr>
-				<%for (Usuario u : usuarios) { %>
+				<%for (Produto u : produtos) { %>
 					<tr>
 						<td><%=u.getId()%></td>
 						<td><%=u.getNome()%></td>
-						<td><%=u.getLogin()%></td>
-						<td><%=u.getPerfil()%></td>
 						<td><button type="submit" value="Editar<%=u.getId()%>" name="cmd">Editar</button></td>
 						<td><button type="submit" value="Excluir<%=u.getId()%>" name="cmd">Excluir</button></td>
 					</tr>
