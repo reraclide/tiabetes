@@ -16,4 +16,14 @@ public enum TipoPerfil {
 		return valor;
 	}
 	
+	public static TipoPerfil getPerfil(int num){
+		if (num == 0)
+			return TipoPerfil.ADMINSTRADOR;
+		else if (num == 1)
+			return TipoPerfil.FUNCIONARIO;
+		else 
+			return TipoPerfil.CLIENTE;
+		
+	}
+	
 }

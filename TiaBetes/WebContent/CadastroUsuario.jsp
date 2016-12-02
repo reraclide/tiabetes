@@ -17,14 +17,15 @@
 		String mensagem = (String) session.getAttribute("MENSAGEM");
 		Usuario usuario = (Usuario) session.getAttribute("USUARIO");
 		
-		UsuarioDAO usrDAO = new UsuarioMSQL();
-		List<Usuario> usuarios = usrDAO.buscarListaUsuario(); 
+		@SuppressWarnings("unchecked")
+		List<Usuario> usuarios = (List<Usuario>) session.getAttribute("USUARIO_LISTA"); 
 		
 		Usuario usrEdit = (Usuario) session.getAttribute("USUARIO_EDITAR");
 		
 		session.setAttribute("MENSAGEM", null);
 		session.setAttribute("LISTAUSUARIO", null);
 		session.setAttribute("USUARIO_EDITAR", null);
+		session.setAttribute("USUARIO_LISTA", null);
 		
 		if (usuario == null) response.sendRedirect("./Login.jsp");
 		
@@ -34,6 +35,11 @@
 		
 		if (modo == null) {
 			modo = "Novo Usuário";
+		}
+		
+		if (usuarios == null || usuarios.size() <= 0){
+			UsuarioDAO usrDAO = new UsuarioMSQL();
+			usuarios = usrDAO.buscarListaUsuario();
 		}
 		
 		String idEdit = "";
@@ -60,9 +66,18 @@
 		<h2>Cadastro de Usuários</h2>
 		<h3><%=modo%></h3>
 		<h4><%=mensagem%></h4>
+		
 		<br />
 		<form action="./CadastroUsuarioController" method="POST">
 			<table>
+				<tr style="display:none;">
+					<td><label for="txtModo">Modo: </label></td>
+					<td><input id="txtModo" type="text" name="txtModo" value='<%=modo%>' /></td>
+				</tr>
+				<tr style="display:none;">
+					<td><label for="txtId">Id: </label></td>
+					<td><input id="txtId" type="text" name="txtId" value='<%=idEdit%>' /></td>
+				</tr>
 				<tr>
 					<td><label for="txtNome">Nome: </label></td>
 					<td><input id="txtNome" type="text" name="txtNome" value='<%=nomeEdit%>' /></td>
@@ -107,6 +122,7 @@
 					<td>Login</td>
 					<td>Perfil</td>
 					<td></td>
+					<td></td>
 				</tr>
 				<%for (Usuario u : usuarios) { %>
 					<tr>
@@ -115,6 +131,7 @@
 						<td><%=u.getLogin()%></td>
 						<td><%=u.getPerfil()%></td>
 						<td><button type="submit" value="Editar<%=u.getId()%>" name="cmd">Editar</button></td>
+						<td><button type="submit" value="Excluir<%=u.getId()%>" name="cmd">Excluir</button></td>
 					</tr>
 				<%}%>
 			</table>
